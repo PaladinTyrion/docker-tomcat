@@ -21,6 +21,7 @@ RUN set -ex \
     && sed -i -e '1,/directory="logs"/{s#directory="logs"#directory="/logs"#}' $CATALINA_HOME/conf/server.xml \
     && sed -i -e "/<\/tomcat-users>/d" $CATALINA_HOME/conf/tomcat-users.xml \
     && echo "$user_conf" >> $CATALINA_HOME/conf/tomcat-users.xml \
-    && sed -i -e 2'i\JAVA_OPTS="-server -Xms8192m -Xmx16384m -XX:PermSize=512M -XX:MaxPermSize=1024M"' $CATALINA_HOME/bin/catalina.sh
+    && sed -i -e 2'i\JAVA_OPTS="-server -Xms${Xms:-8192m} -Xmx${Xmx:-16384m} -XX:PermSize=${PermSize:-512M} -XX:MaxPermSize=${MaxPermSize:-1024M}"' $CATALINA_HOME/bin/catalina.sh
 
+EXPOSE 8080 47095 47096 47097 47098 47099 47100
 CMD ["catalina.sh", "run"]
