@@ -4,6 +4,8 @@ MAINTAINER paladintyrion<paladintyrion@gmail.com>
 ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
+COPY ./start.sh $CATALINA_HOME/bin/start.sh
+
 RUN set -ex \
     && apk update \
     && apk add --no-cache tzdata \
@@ -21,10 +23,10 @@ RUN set -ex \
     && sed -i -e '1,/directory="logs"/{s#directory="logs"#directory="/logs"#}' $CATALINA_HOME/conf/server.xml \
     && sed -i -e "/<\/tomcat-users>/d" $CATALINA_HOME/conf/tomcat-users.xml \
     && echo "$user_conf" >> $CATALINA_HOME/conf/tomcat-users.xml \
-    && sed -i -e 2'i\JAVA_OPTS="-server -Xms${Xms:-4096m} -Xmx${Xmx:-10240m} -XX:PermSize=${PermSize:-256M} -XX:MaxPermSize=${MaxPermSize:-512M}"' $CATALINA_HOME/bin/catalina.sh; \
-      if [ ! -z "$PASSWD" ]; then \
-        sed -i -e "s/password=\"\([^\"]*\)\"/password=\"${PASSWD}\"/g" $CATALINA_HOME/conf/tomcat-users.xml; \
-      fi
+    && sed -i -e 2'i\JAVA_OPTS="-server -Xms${Xms:-4096m} -Xmx${Xmx:-10240m} -XX:PermSize=${PermSize:-256M} -XX:MaxPermSize=${MaxPermSize:-512M}"' $CATALINA_HOME/bin/catalina.sh \
+    && chmod +x $CATALINA_HOME/bin/start.sh
 
 EXPOSE 8080 80
+
+ENTRYPOINT ["/usr/local/tomcat/bin/start.sh"]
 CMD ["catalina.sh", "run"]
