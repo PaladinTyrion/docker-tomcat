@@ -8,7 +8,7 @@ COPY ./start.sh $CATALINA_HOME/bin/start.sh
 
 RUN set -ex \
     && apk update \
-    && apk add --no-cache tzdata \
+    && apk add --no-cache tzdata bash \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && user_conf='  <role rolename="manager"/> \
   <role rolename="tomcat"/> \
