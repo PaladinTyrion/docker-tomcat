@@ -10,6 +10,7 @@ RUN set -ex \
     && apk update \
     && apk add --no-cache tzdata bash \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && mkdir -p /data1/base/tomcat/logs \
     && user_conf='  <role rolename="manager"/> \
   <role rolename="tomcat"/> \
   <role rolename="admin"/> \
